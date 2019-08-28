@@ -41,6 +41,16 @@ fn image_mock(format: Option<String>, info: Option<Form<ImageInfo>>) -> String {
     format!("{} {}", image_format, image_size)
 }
 
+// TODO: Response mock image. this is don't work.
+// use rocket::response::Response;
+// use rocket::http::ContentType;
+// use std::fs::File;
+// use std::io::Error;
+
+// Response::build()
+//     .header(ContentType::PNG)
+//     .sized_body(File::open("static/test.png"))
+//     .ok()
 fn main() {
     rocket::ignite()
         .mount("/", routes![index, image_mock])
