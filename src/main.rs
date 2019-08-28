@@ -3,10 +3,17 @@
 #[macro_use] extern crate rocket;
 
 use rocket::request::Form;
+use rocket::response::*;
+use std::path::{Path, PathBuf};
 
 #[get("/")]
 fn index() -> &'static str {
     "Hello, world!"
+}
+
+#[get("/<file..>")]
+fn static_image(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("static/").join(file)).ok()
 }
 
 /// image_mock 
@@ -32,5 +39,8 @@ fn image_mock(format: Option<String>, info: Option<Form<ImageInfo>>) -> String {
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![index, image_mock]).launch();
+    rocket::ignite()
+        .mount("/", routes![index, image_mock])
+        .mount("/static", routes![static_image])
+        .launch();
 }
