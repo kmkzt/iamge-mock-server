@@ -3,8 +3,10 @@
 #[macro_use] extern crate rocket;
 
 use rocket::request::Form;
-use rocket::response::*;
+use rocket::response::NamedFile;
+use rocket::response::status::NotFound;
 use std::path::{Path, PathBuf};
+use std::result::Result;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -12,8 +14,9 @@ fn index() -> &'static str {
 }
 
 #[get("/<file..>")]
-fn static_image(file: PathBuf) -> Option<NamedFile> {
-    NamedFile::open(Path::new("static/").join(file)).ok()
+fn static_image(file: PathBuf) -> Result<NamedFile, NotFound<String>> {
+    let path = Path::new("static/").join(file);
+    NamedFile::open(&path).map_err(|_| NotFound(format!("Bad path: {:?}", path)))
 }
 
 /// image_mock 
