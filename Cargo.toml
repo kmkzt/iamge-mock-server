@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 rocket = "0.4.2"
+image = "0.22.1"
+gif = "0.10.2"
